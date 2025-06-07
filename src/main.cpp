@@ -16,6 +16,7 @@ struct Question {
 // Function declarations
 Question make_question(std::random_device& rd);
 
+// Main function
 int main() {
     std::cout << "Generating questions...\n\n";
     std::random_device rd;
@@ -38,7 +39,10 @@ int main() {
             std::cout << "WRONG! You inputted something wrong...\nTechnical details: Type: std::invalid_argument, What: " << e.what() << "\n\n";
             continue;
         }
-
+        catch (std::out_of_range e) {
+            std::cout << "WRONG! Better luck next time!\n\n";
+            continue;
+        }
         if (answer == question.add()) {
             std::cout << "CORRECT! Well done!\n\n";
             score++;
