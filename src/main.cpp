@@ -14,18 +14,19 @@ struct Question {
 };
 
 // Function declarations
-Question make_question(std::random_device& rd);
+Question make_question(std::mt19937& engine);
 
 // Main function
 int main() {
     std::cout << "Generating questions...\n\n";
     std::random_device rd;
+    std::mt19937 engine(rd());
     std::vector<Question> questions;
     for (int questions_initialised = 0; questions_initialised < AMOUNT_OF_QUESTIONS; questions_initialised++) {
-        questions.emplace_back(make_question(rd));
+        questions.emplace_back(make_question(engine));
     }
     int questionsDone = 0;
-    int score;
+    int score = 0;
     for (Question question : questions) {
         std::cout << "Question " << ++questionsDone << std::string(score, '!') << "\n";
         std::cout << "What is " << question.numbers.first << " + " << question.numbers.second << "? ";
@@ -56,8 +57,7 @@ int main() {
 }
 
 
-Question make_question(std::random_device& rd) {
-    std::mt19937 num1(rd()); std::mt19937 num2(rd()); // Generate 2 random 32-bit numbers
+Question make_question(std::mt19937& engine) {
     std::uniform_int_distribution<> limitNum(1, NUMBER_LIMIT);
-    return Question(limitNum(num1), limitNum(num2)); // Limit the numbers to a range of 1-[limit] then return them
+    return Question(limitNum(engine), limitNum(engine)); // Limit the numbers to a range of 1-[limit] then return them
 }
